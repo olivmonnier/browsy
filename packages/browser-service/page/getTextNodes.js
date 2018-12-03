@@ -58,5 +58,7 @@ module.exports = function() {
       nodeList.push(textNode);
     }
   }
-  window.TEXT_NODES =  nodeList;
+  window.TEXT_NODES = nodeList;
+
+  return nodeList;
 }
