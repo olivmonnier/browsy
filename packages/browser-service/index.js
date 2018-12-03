@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const { getTextNodes, hideTextNodes, getFonts } = require('./page');
-const { renderFonts, renderTextNodes } = require('./renders');
+const { renderLayout } = require('./renders');
 const findFontFamilyByUrl = require('./utils/findFontFamilyByUrl');
 const findFormatFont = require('./utils/findFormatFont');
 
@@ -30,12 +30,19 @@ const findFormatFont = require('./utils/findFormatFont');
     });
   
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto('https://medium.com/');
-    // await page.waitForNavigation({ waitUntil: 'load' });
-    const fontsUsed = await page.evaluate(getFonts);
-    const textNodes = await page.evaluate(getTextNodes);
-    await page.evaluate(hideTextNodes);
-    await page.screenshot({path: 'capture.jpg', type: 'jpeg', fullPage: true});
+    await page.goto('https://www.nytimes.com/');
+    // await page.waitForNavigation({ waitUntil: 'networkidle2' });
+    const fontsUsed = await page.evaluate(getFonts) || [];
+    const textNodes = await page.evaluate(getTextNodes) || [];
+    if (textNodes.length > 0) {
+      await page.evaluate(hideTextNodes);
+    }
+    const bg = await page.screenshot({ 
+      type: 'jpeg', 
+      fullPage: true,
+      quality: 65,
+      encoding: 'base64'
+    });
     
     await browser.close();
     
@@ -45,30 +52,7 @@ const findFormatFont = require('./utils/findFormatFont');
         format: findFormatFont(font.href)
       });
     });
-  
-    let html = `<html><head><meta charset="utf-8" /><style>
-  
-      * {
-        margin: 0;
-        text-decoration: none;
-      }
-      html, body {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-        overflow-y: 'auto';
-        position: relative;
-      }
-      button {
-        background: transparent;
-        border: none;
-        padding: 0;
-      }
-      .bg {
-        width: 1920px;
-        height: auto;
-      }
-    </style></head><body><img class="bg" src="./capture.jpg"/>${ renderTextNodes(textNodes) }</body></html>`;
+    const html = renderLayout(textNodes, fontsFace, bg);
   
     fs.writeFileSync('test.html', html, 'utf8');
   } catch (e) {
