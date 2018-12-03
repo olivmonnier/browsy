@@ -3,6 +3,7 @@ function hideTextNodes() {
 
   textNodes.forEach(node => {
     node.el.parentElement.style.color = 'transparent';
+    node.el.parentElement.style.textShadow = 'none';
   });
 }
 

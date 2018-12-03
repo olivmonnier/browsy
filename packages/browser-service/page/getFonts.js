@@ -1,20 +1,16 @@
 module.exports = function () {
-  var fonts = {};
+  const arr = [];
+  const sheets = Array.from(document.styleSheets);
 
-  function getFonts (obj) {
-      var o = obj || {},
-          sheet = document.styleSheets,
-          rule = null,
-          i = sheet.length, j;
-      while( 0 <= --i ){
-          rule = sheet[i].rules || sheet[i].cssRules || [];
-          j = rule.length;
-          while( 0 <= --j ){
-              if( rule[j].constructor.name === 'CSSFontFaceRule' ){ // rule[j].slice(0, 10).toLowerCase() === '@font-face'
-                  o[ rule[j].style.fontFamily ] = rule[j].style.src;
-              };
-          }
+  sheets.forEach(sheet => {
+    const rules = Array.from(sheet.rules) || Array.from(sheet.cssRules) || [];
+
+    rules.forEach(rule => {
+      if (rule.constructor.name === 'CSSFontFaceRule') {
+        arr.push([rule.style.fontFamily, rule.style.src])
       }
-      return o;
-  }
+    })
+  });
+
+  window.FONTS = arr;
 }
