@@ -30,7 +30,7 @@ const findFormatFont = require('./utils/findFormatFont');
     });
   
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto('https://www.nytimes.com/');
+    await page.goto('https://www.lemonde.fr/');
     // await page.waitForNavigation({ waitUntil: 'networkidle2' });
     const fontsUsed = await page.evaluate(getFonts) || [];
     const textNodes = await page.evaluate(getTextNodes) || [];
@@ -56,6 +56,6 @@ const findFormatFont = require('./utils/findFormatFont');
   
     fs.writeFileSync('test.html', html, 'utf8');
   } catch (e) {
-    console.error(e)
+    console.error(e);
   }
 })();

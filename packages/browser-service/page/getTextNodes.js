@@ -19,10 +19,7 @@ module.exports = function() {
   }
   
   function getTextOfTextNode(node) {
-    return node.textContent
-    // return node.textContent.split('').map((char) => {
-    //   return char === ' ' ? '\u00A0' : char
-    // }).join('');
+    return node.textContent;
   }
 
   function getStylesText(node) {
