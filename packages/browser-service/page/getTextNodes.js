@@ -41,11 +41,10 @@ module.exports = function() {
     const { currentNode } = treeWalker;
     const parentEl = currentNode.parentElement;
 
-    if (currentNode.textContent.trim() !== '') {
+    parentEl.setAttribute('data-browsy-node', 'text');
 
+    if (currentNode.textContent.trim() !== '') {
       const textNode = {
-        el: currentNode,
-        parentEl,
         styles: getStylesText(parentEl),
         positions: getPositionsTextNode(currentNode),
         text: getTextOfTextNode(currentNode),
@@ -55,7 +54,6 @@ module.exports = function() {
       nodeList.push(textNode);
     }
   }
-  window.TEXT_NODES = nodeList;
 
   return nodeList;
 }

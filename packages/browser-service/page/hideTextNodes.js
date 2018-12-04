@@ -1,9 +1,9 @@
 function hideTextNodes() {
-  const textNodes = window.TEXT_NODES;
+  const textNodes = Array.from(document.querySelectorAll('[data-browsy-node="text"]'));
 
   textNodes.forEach(node => {
-    node.el.parentElement.style.color = 'transparent';
-    node.el.parentElement.style.textShadow = 'none';
+    node.style.color = 'transparent';
+    node.style.textShadow = 'none';
   });
 }
 

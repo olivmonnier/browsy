@@ -28,13 +28,13 @@ const findFormatFont = require('./utils/findFormatFont');
         } 
         else if (type === 'stylesheet') {
           const stylesheetContent = await resp.text();
-          console.log(stylesheetContent)
+          // console.log(stylesheetContent)
         }
       }
     });
   
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto('https://www.lemonde.fr/', { waitUntil: 'networkidle2' });
+    await page.goto('https://www.nytimes.com/', { waitUntil: 'networkidle2' });
 
     const fontsUsed = await page.evaluate(getFonts) || [];
     const textNodes = await page.evaluate(getTextNodes) || [];
@@ -45,7 +45,7 @@ const findFormatFont = require('./utils/findFormatFont');
     const bg = await page.screenshot({ 
       type: 'jpeg', 
       fullPage: true,
-      quality: 65,
+      quality: 40,
       encoding: 'base64'
     });
     
@@ -58,8 +58,9 @@ const findFormatFont = require('./utils/findFormatFont');
       });
     });
     const html = renderLayout(textNodes, fontsFace, bg);
-  
+    
     fs.writeFileSync('test.html', html, 'utf8');
+    
   } catch (e) {
     console.error(e);
   }
