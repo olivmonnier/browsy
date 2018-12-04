@@ -7,7 +7,7 @@ const findFormatFont = require('./utils/findFormatFont');
 
 (async () => {
   try {
-    let fonts = [];
+    let FONTS = [];
     const puppeteerOptions = {
       headless: false
     }
@@ -24,16 +24,21 @@ const findFormatFont = require('./utils/findFormatFont');
           const buffer = await resp.buffer();
           const fontContent = `data:${headers['content-type']};charset=utf-8;base64,${buffer.toString('base64')}`;
   
-          fonts.push({ href, data: fontContent });
+          FONTS.push({ href, data: fontContent });
+        } 
+        else if (type === 'stylesheet') {
+          const stylesheetContent = await resp.text();
+          console.log(stylesheetContent)
         }
       }
     });
   
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto('https://www.lemonde.fr/');
-    // await page.waitForNavigation({ waitUntil: 'networkidle2' });
+    await page.goto('https://www.lemonde.fr/', { waitUntil: 'networkidle2' });
+
     const fontsUsed = await page.evaluate(getFonts) || [];
     const textNodes = await page.evaluate(getTextNodes) || [];
+
     if (textNodes.length > 0) {
       await page.evaluate(hideTextNodes);
     }
@@ -46,7 +51,7 @@ const findFormatFont = require('./utils/findFormatFont');
     
     await browser.close();
     
-    const fontsFace = fonts.map(font => {
+    const fontsFace = FONTS.map(font => {
       return Object.assign({}, font, { 
         fontFamily: findFontFamilyByUrl(fontsUsed, font.href),
         format: findFormatFont(font.href)
