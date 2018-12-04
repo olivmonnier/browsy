@@ -1,8 +1,12 @@
 module.exports = function() {
   function isHidden(el) {
     const style = window.getComputedStyle(el);
-    
-    if (style.visibility === 'hidden' || style.opacity === 0) {
+    const rect = el.getBoundingClientRect();
+    const { width, height } = rect;
+
+    if (width <= 1 || height <= 1) {
+      return true;
+    } else if (style.visibility === 'hidden' || style.opacity === 0) {
       return true;
     } else if (style.position === 'fixed') {
       return (style.display === 'none')

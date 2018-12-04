@@ -35,8 +35,8 @@ const { renderLayout } = require('./renders');
       }
     });
   
-    await page.setViewport({ width: 1920, height: 450 });
-    await page.goto('https://lemonde.fr/', { waitUntil: 'networkidle2' });
+    await page.setViewport({ width: 1920, height: 1080 });
+    await page.goto('https://lalettrea.fr/', { waitUntil: 'networkidle2' });
 
     const fontsUsed = STYLESHEETS
       .map(stylesheet => stylesheet.rules)
