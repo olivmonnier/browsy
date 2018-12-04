@@ -17,9 +17,18 @@ const styles = `
     border: none;
     padding: 0;
   }
+  body * {
+    position: absolute;
+  }
   .bg {
     width: 100%;
     height: auto;
+    image-rendering: optimizeSpeed;             
+    image-rendering: -moz-crisp-edges;          /* Firefox                        */
+    image-rendering: -o-crisp-edges;            /* Opera                          */
+    image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+    image-rendering: pixelated; /* Chrome */
+    image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
   }
 `;
 
