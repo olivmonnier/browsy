@@ -1,5 +1,5 @@
 function hideTextNodes() {
-  const textNodes = Array.from(document.querySelectorAll('[data-browsy-node="text"] > span'));
+  const textNodes = Array.from(document.querySelectorAll('[data-browsy-node="text"]'));
 
   textNodes.forEach(node => {
     node.style.color = 'transparent';

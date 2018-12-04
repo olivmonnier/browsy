@@ -18,7 +18,7 @@ const styles = `
     padding: 0;
   }
   .bg {
-    width: 1920px;
+    width: 100%;
     height: auto;
   }
 `;

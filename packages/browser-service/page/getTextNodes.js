@@ -11,11 +11,13 @@ module.exports = function() {
 
   function getPositionsTextNode(node) {  
     const span = document.createElement('span');
+    span.setAttribute('data-browsy-node', 'text');
     node.parentNode.insertBefore(span, node);
     span.appendChild(node); 
-    const { top, left, right, bottom, height, width } = span.getBoundingClientRect();
-
-    return { top, left, right, bottom, height, width }
+    const rect = node.parentElement.getBoundingClientRect();
+    const { top, left, width, height } = rect;
+    
+    return { top, left, width, height }
   }
   
   function getTextOfTextNode(node) {
@@ -24,9 +26,9 @@ module.exports = function() {
 
   function getStylesText(node) {
     const styles = window.getComputedStyle(node)
-    const { fontFamily, fontSize, fontWeight, color, textAlign, textTransform, lineHeight, whiteSpace } = styles;
+    const { fontFamily, fontSize, fontWeight, color, textAlign, textTransform, lineHeight, whiteSpace, letterSpacing } = styles;
 
-    return { fontFamily, fontSize, fontWeight, color, textAlign, textTransform, lineHeight, whiteSpace }
+    return { fontFamily, fontSize, fontWeight, color, textAlign, textTransform, lineHeight, whiteSpace, letterSpacing }
   }
   
   const nodeList = [];
@@ -41,7 +43,7 @@ module.exports = function() {
     const { currentNode } = treeWalker;
     const parentEl = currentNode.parentElement;
 
-    parentEl.setAttribute('data-browsy-node', 'text');
+    parentEl.setAttribute('data-browsy-node', 'parent');
 
     if (currentNode.textContent.trim() !== '') {
       const textNode = {

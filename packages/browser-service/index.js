@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const css = require('css');
-const { getTextNodes, hideTextNodes, getFonts } = require('./page');
+const { getTextNodes, hideTextNodes } = require('./page');
 const { renderLayout } = require('./renders');
 
 (async () => {
@@ -28,15 +28,15 @@ const { renderLayout } = require('./renders');
         } 
         else if (type === 'stylesheet') {
           const stylesheetContent = await resp.text();
-          const stylesheetContentParsed = css.parse(stylesheetContent);
+          const stylesheetContentParsed = css.parse(stylesheetContent, { silent: true });
 
-          STYLESHEETS.push(stylesheetContentParsed.stylesheet)//.rules.filter(r => r.type === 'font-face'));
+          STYLESHEETS.push(stylesheetContentParsed.stylesheet);
         }
       }
     });
   
-    await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto('https://lalettrea.fr/', { waitUntil: 'networkidle2' });
+    await page.setViewport({ width: 1920, height: 450 });
+    await page.goto('https://lemonde.fr/', { waitUntil: 'networkidle2' });
 
     const fontsUsed = STYLESHEETS
       .map(stylesheet => stylesheet.rules)
@@ -51,11 +51,11 @@ const { renderLayout } = require('./renders');
     const bg = await page.screenshot({ 
       type: 'jpeg', 
       fullPage: true,
-      quality: 40,
+      quality: 20,
       encoding: 'base64'
     });
     
-    // await browser.close();
+    await browser.close();
     
     const fontsFace = FONTS.map(font => {
       const url = font.href;
@@ -71,13 +71,15 @@ const { renderLayout } = require('./renders');
           }) ? f : acc;
       }, {});
 
-      const fontFamily = fontSrc.declarations
-        .filter(d => d.property === 'font-family')
-        .reduce((acc, d) => {
-          return (d && d.value) ? d.value : acc
-        }, '');
-
-      return Object.assign({}, font, { fontFamily });
+      if (fontSrc && fontSrc.declarations) {
+        const fontFamily = fontSrc.declarations
+          .filter(d => d.property === 'font-family')
+          .reduce((acc, d) => {
+            return (d && d.value) ? d.value : acc
+          }, '');
+  
+        return Object.assign({}, font, { fontFamily });
+      } else return font;
     });
 
     const html = renderLayout(textNodes, fontsFace, bg);
