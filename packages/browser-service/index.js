@@ -1,13 +1,13 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const css = require('css');
 const { getTextNodes, hideTextNodes, getFonts } = require('./page');
 const { renderLayout } = require('./renders');
-const findFontFamilyByUrl = require('./utils/findFontFamilyByUrl');
-const findFormatFont = require('./utils/findFormatFont');
 
 (async () => {
   try {
     let FONTS = [];
+    let STYLESHEETS = [];
     const puppeteerOptions = {
       headless: false
     }
@@ -28,15 +28,21 @@ const findFormatFont = require('./utils/findFormatFont');
         } 
         else if (type === 'stylesheet') {
           const stylesheetContent = await resp.text();
-          // console.log(stylesheetContent)
+          const stylesheetContentParsed = css.parse(stylesheetContent);
+
+          STYLESHEETS.push(stylesheetContentParsed.stylesheet)//.rules.filter(r => r.type === 'font-face'));
         }
       }
     });
   
     await page.setViewport({ width: 1920, height: 1080 });
-    await page.goto('https://www.nytimes.com/', { waitUntil: 'networkidle2' });
+    await page.goto('https://lalettrea.fr/', { waitUntil: 'networkidle2' });
 
-    const fontsUsed = await page.evaluate(getFonts) || [];
+    const fontsUsed = STYLESHEETS
+      .map(stylesheet => stylesheet.rules)
+      .reduce((acc, rules) => acc.concat(rules), [])
+      .filter(rule => rule.type === 'font-face');
+      
     const textNodes = await page.evaluate(getTextNodes) || [];
 
     if (textNodes.length > 0) {
@@ -49,14 +55,31 @@ const findFormatFont = require('./utils/findFormatFont');
       encoding: 'base64'
     });
     
-    await browser.close();
+    // await browser.close();
     
     const fontsFace = FONTS.map(font => {
-      return Object.assign({}, font, { 
-        fontFamily: findFontFamilyByUrl(fontsUsed, font.href),
-        format: findFormatFont(font.href)
-      });
+      const url = font.href;
+
+      const fontSrc = fontsUsed.reduce((acc, f) => {
+        return f.declarations
+          .filter(d => d.property === 'src')
+          .find(d => {
+            const urlSplitted = url.split('/'); 
+            const fontFileName = urlSplitted[urlSplitted.length - 1];
+
+            return d.value.includes(fontFileName)
+          }) ? f : acc;
+      }, {});
+
+      const fontFamily = fontSrc.declarations
+        .filter(d => d.property === 'font-family')
+        .reduce((acc, d) => {
+          return (d && d.value) ? d.value : acc
+        }, '');
+
+      return Object.assign({}, font, { fontFamily });
     });
+
     const html = renderLayout(textNodes, fontsFace, bg);
     
     fs.writeFileSync('test.html', html, 'utf8');
