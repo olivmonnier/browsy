@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const css = require('css');
 const url = require('url');
+const encode = require( 'hashcode' ).hashCode;
 const { getTextNodes, hideTextNodes } = require('./page');
 const { renderLayout } = require('./renders');
 const getFontFamily = require('./utils/getFontFamily');
@@ -64,10 +65,11 @@ module.exports = async function(link = 'https://google.com', options = {}) {
       encoding: 'base64'
     }, newOptions.screenshot));
     const html = renderLayout(textNodes, FONTS, bg);
+    const hash = encode().value(bg);
 
     await browser.close();
     
-    return { html, browserWSEndpoint };
+    return { html, hash, browserWSEndpoint };
     
   } catch (e) {
     console.error(e);
