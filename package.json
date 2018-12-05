@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "lerna bootstrap",
-    "browser:dev": "cd ./packages/browser-service && npm run dev"
+    "postinstall": "lerna bootstrap --hoist",
+    "browser:dev": "cd ./packages/browser-service && npm run dev",
+    "server:dev": "cd ./packages/server && npm run dev"
   },
   "keywords": [],
   "author": "",

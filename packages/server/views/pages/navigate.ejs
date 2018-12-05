@@ -1,0 +1,13 @@
+<main>
+  <nav>
+    <form action="/navigate" method="POST">
+      <input type="string" name="url" />
+      <button type="submit">Go</button>
+    </form>
+  </nav>
+  <section>
+    <% if (locals.html) { %>
+      <iframe src="data:text/html;charset=utf-8,<%= encodeURI(locals.html) %>" style="width: 100%; height: 100%;"></iframe>
+    <% } %>
+  </section>
+</main>

@@ -58,7 +58,11 @@ module.exports = async function(link = '', options = {}) {
     if (textNodes.length > 0) {
       await page.evaluate(hideTextNodes);
     }
-    const bg = await page.screenshot(newOptions.screenshot);
+    const bg = await page.screenshot(Object.assign({
+      type: 'jpeg', 
+      fullPage: true,
+      encoding: 'base64'
+    }, newOptions.screenshot));
     const html = renderLayout(textNodes, FONTS, bg);
 
     await browser.close();
