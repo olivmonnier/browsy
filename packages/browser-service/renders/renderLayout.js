@@ -32,6 +32,7 @@ const styles = `
     image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
     image-rendering: pixelated; /* Chrome */
     image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
+    user-select: none;
   }
 `;
 
