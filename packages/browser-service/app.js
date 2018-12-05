@@ -30,7 +30,7 @@ module.exports = async function(link = '', options = {}) {
       const headers = resp.headers();
   
       if (resp.ok()) {
-        if (type === 'font') {
+        if (type === 'font' && newOptions.fonts) {
           const buffer = await resp.buffer();
           const fontContent = `data:${headers['content-type']};charset=utf-8;base64,${buffer.toString('base64')}`;
   
@@ -46,8 +46,12 @@ module.exports = async function(link = '', options = {}) {
     });
   
     await page.setViewport(newOptions.viewport);
-    await page.goto(newUrl, { waitUntil: 'networkidle2' })
-      .then(() => FONTS = getFontFamily(FONTS, STYLESHEETS));    
+    await page.goto(newUrl, { waitUntil: 'networkidle0' })
+      .then(() => {
+        if (newOptions.fonts) {
+          FONTS = getFontFamily(FONTS, STYLESHEETS)
+        }
+      });    
 
     const textNodes = await page.evaluate(getTextNodes) || [];
 

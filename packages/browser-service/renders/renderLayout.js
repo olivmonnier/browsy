@@ -8,21 +8,24 @@ const styles = `
   html, body {
     margin: 0;
     width: 100%;
-    height: 100%;
+    height: 100%; 
+  }
+  body {
     overflow-y: auto;
+    overflow-x: hidden
+  }
+  main {
     position: relative;
+  }
+  main * {
+    position: absolute;
   }
   button {
     background: transparent;
     border: none;
     padding: 0;
   }
-  body * {
-    position: absolute;
-  }
   .bg {
-    width: 100%;
-    height: auto;
     image-rendering: optimizeSpeed;             
     image-rendering: -moz-crisp-edges;          /* Firefox                        */
     image-rendering: -o-crisp-edges;            /* Opera                          */
@@ -36,8 +39,8 @@ module.exports = function(textNodes, fonts, bg) {
   return '<html><head><meta charset="utf-8" /><style>' + 
     (fonts ? renderFonts(fonts) : '') +
     styles.replace(/\n/g, '') + 
-    '</style></head><body>' +
+    '</style></head><body><main>' +
     '<img class="bg" src="data:image/jpeg;base64,' + bg + '"/>' + 
     renderTextNodes(textNodes) +
-    '</body></html>';
+    '</main></body></html>';
 }

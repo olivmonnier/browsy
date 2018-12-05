@@ -1,6 +1,6 @@
 module.exports = {
   puppeteer: {
-    headless: false
+    headless: true
   },
   viewport: {
     width: 1920,
@@ -8,8 +8,9 @@ module.exports = {
   },
   screenshot: {
     type: 'jpeg', 
-      fullPage: true,
-      quality: 1,
-      encoding: 'base64'
-  }
+    fullPage: true,
+    quality: 1,
+    encoding: 'base64'
+  },
+  fonts: false
 }
