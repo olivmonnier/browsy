@@ -12,8 +12,12 @@ $formNav.addEventListener('submit', function(e) {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
   });
+  const width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+  const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+  const viewport = { width, height };
+  const options = { viewport };
   const url = $inputUrl.value;
-  const body = JSON.stringify({ url });
+  const body = JSON.stringify({ url, options });
 
   fetch(formUrl, { headers, method, body })
     .then(response => response.json())

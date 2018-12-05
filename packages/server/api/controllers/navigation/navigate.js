@@ -13,6 +13,9 @@ module.exports = {
     url: {
       type: 'string',
       required: true
+    },
+    options: {
+      type: 'ref'
     }
   },
 
@@ -30,7 +33,8 @@ module.exports = {
 
 
   fn: async function (inputs, exits) {
-    const { html } = await browserService(inputs.url);
+    const { url, options } = inputs;
+    const { html } = await browserService(url, options);
 
     // All done.
     return exits.json({
