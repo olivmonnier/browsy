@@ -21,6 +21,10 @@ module.exports = {
     success: {
       responseType: 'view',
       viewTemplatePath: 'pages/navigate'
+    }, 
+    json: {
+      responseType: '',
+      statusCode: 200
     }
   },
 
@@ -29,7 +33,7 @@ module.exports = {
     const { html } = await browserService(inputs.url);
 
     // All done.
-    return exits.success({
+    return exits.json({
       locals: { html}
     });
   }

@@ -6,7 +6,7 @@ const { renderLayout } = require('./renders');
 const getFontFamily = require('./utils/getFontFamily');
 const optionsDefault = require('./defaults');
 
-module.exports = async function(link = '', options = {}) {
+module.exports = async function(link = 'https://google.com', options = {}) {
   try {
     let browser, browserWSEndpoint, FONTS = [], STYLESHEETS = [];
 
