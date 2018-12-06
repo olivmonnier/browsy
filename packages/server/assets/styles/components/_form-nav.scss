@@ -1,0 +1,32 @@
+:root {
+  --nav-padding-top: 8px;
+  --nav-border-bottom: 1px solid var(--gray-2);
+  --nav-columns-margin: 0 8px;
+  --nav-options-padding: 8px 15px;
+  --nav-options-items-margin: 0 15px;
+}
+
+.form-nav {
+  padding-top: var(--nav-padding-top);
+  border-bottom: var(--nav-border-bottom);
+
+  > .column {
+    margin: var(--nav-columns-margin);
+
+    &:first-child {
+      flex: 1;
+    }
+  }
+
+  .search-url {
+    flex: 1;
+  }
+
+  .form-options {
+    padding: var(--nav-options-padding);
+
+    > * {
+      margin: var(--nav-options-items-margin);
+    }
+  }
+}

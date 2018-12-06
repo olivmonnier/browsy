@@ -1,4 +1,5 @@
-@import 'base';
+@import 'reset';
+@import 'typography';
 
 // Mixins
 @import './mixins/btn';
@@ -6,8 +7,7 @@
 
 // Components
 @import './components/btn';
+@import './components/form-nav';
+@import './components/loading';
 @import './components/grid';
 @import './components/search-url';
-
-// Pages  
-@import './pages/navigation';

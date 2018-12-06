@@ -23,11 +23,14 @@ $formNav.addEventListener('submit', function(e) {
   const url = $inputUrl.value;
   const body = JSON.stringify({ url, options });
 
+  $iframe.parentElement.classList.add('loading');
+
   fetch(formUrl, { headers, method, body })
     .then(response => response.json())
     .then(json => {
       const { html } = json.locals;
 
       $iframe.setAttribute('src', `data:text/html;charset=utf-8,${encodeURI(html)}`);
-    });
+    })
+    .finally(() => $iframe.parentElement.classList.remove('loading'));
 });

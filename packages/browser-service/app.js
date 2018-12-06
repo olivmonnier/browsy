@@ -59,6 +59,7 @@ module.exports = async function(link = 'https://google.com', options = {}) {
     if (textNodes.length > 0) {
       await page.evaluate(hideTextNodes);
     }
+    
     const bg = await page.screenshot(Object.assign({
       type: 'jpeg', 
       fullPage: true,
