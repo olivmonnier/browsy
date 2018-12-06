@@ -2,6 +2,7 @@ const $formNav = document.querySelector('.form-nav');
 const $inputUrl = document.querySelector('input[name="url"]');
 const $iframe = document.querySelector('iframe');
 const $checkboxFonts = document.querySelector('.checkbox-fonts');
+const $inputQuality = document.querySelector('input[name="quality"]');
 
 $formNav.addEventListener('submit', function(e) {
   e.preventDefault();
@@ -17,7 +18,8 @@ $formNav.addEventListener('submit', function(e) {
   const height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
   const viewport = { width, height };
   const fonts = $checkboxFonts.checked;
-  const options = { viewport, fonts };
+  const quality = parseInt($inputQuality.value, 10);
+  const options = { viewport, fonts, screenshot: { quality } };
   const url = $inputUrl.value;
   const body = JSON.stringify({ url, options });
 
