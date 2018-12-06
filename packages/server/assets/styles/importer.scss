@@ -1,4 +1,13 @@
 @import 'base';
 
-// Pages
+// Mixins
+@import './mixins/btn';
+@import './mixins/grid';
+
+// Components
+@import './components/btn';
+@import './components/grid';
+@import './components/search-url';
+
+// Pages  
 @import './pages/navigation';

@@ -1,8 +1,17 @@
 <main>
   <nav>
-    <form action="/navigate" method="POST" class="form-nav">
-      <input type="string" name="url" />
-      <button type="submit">Go</button>
+    <form action="/navigate" method="POST" class="form-nav row">
+      <div class="column">
+        <input type="string" name="url" class="search-url" autofocus />
+        <div class="row">
+          <label>
+            <input type="checkbox" name="fonts" class="checkbox-fonts" /> Fonts
+          </label>
+        </div>
+      </div>
+      <div class="column">
+        <button type="submit" class="btn-submit">Go</button>
+      </div>
     </form>
   </nav>
   <section>

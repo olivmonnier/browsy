@@ -12,7 +12,9 @@ const styles = `
   }
   body {
     overflow-y: auto;
-    overflow-x: hidden
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   main {
     position: relative;

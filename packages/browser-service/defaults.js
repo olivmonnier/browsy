@@ -7,10 +7,7 @@ module.exports = {
     height: 2080
   },
   screenshot: {
-    type: 'jpeg', 
-    fullPage: true,
-    quality: 1,
-    encoding: 'base64'
+    quality: 1
   },
   fonts: false
 }

@@ -1,0 +1,13 @@
+:root {
+  --search-url-color: #ededed;
+  --search-url-padding: 8px 15px;
+  --search-url-radius: 30px;
+}
+
+.search-url {
+  padding: var(--search-url-padding);
+  background-color: var(--search-url-color);
+  border: none;
+  border-radius: var(--search-url-radius);
+  outline: none;
+}
