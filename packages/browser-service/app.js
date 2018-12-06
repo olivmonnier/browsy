@@ -6,6 +6,7 @@ const { getTextNodes, hideTextNodes } = require('./page');
 const { renderLayout } = require('./renders');
 const getFontFamily = require('./utils/getFontFamily');
 const optionsDefault = require('./defaults');
+const fs = require('fs');
 
 module.exports = async function(link = 'https://google.com', options = {}) {
   try {
@@ -47,15 +48,14 @@ module.exports = async function(link = 'https://google.com', options = {}) {
     });
   
     await page.setViewport(newOptions.viewport);
-    await page.goto(newUrl, { waitUntil: 'networkidle0' })
-      .then(() => {
-        if (newOptions.fonts) {
-          FONTS = getFontFamily(FONTS, STYLESHEETS)
-        }
-      });    
-
+    await page.goto(newUrl, { waitUntil: 'networkidle0' });
+    
     const textNodes = await page.evaluate(getTextNodes) || [];
 
+    if (newOptions.fonts) {
+      FONTS = getFontFamily(FONTS, STYLESHEETS)
+    }
+    
     if (textNodes.length > 0) {
       await page.evaluate(hideTextNodes);
     }
