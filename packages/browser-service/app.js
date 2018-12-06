@@ -14,7 +14,11 @@ module.exports = async function(link = 'https://google.com', options = {}) {
 
     const newOptions = Object.assign({}, optionsDefault, options)
     const { protocol, hostname, pathname } = url.parse(link);
-    const newUrl = url.format({ protocol, hostname, pathname });
+    const newUrl = url.format({ 
+      protocol: protocol || 'http:', 
+      hostname, 
+      pathname 
+    });
 
     if (options.browserWSEndpoint) {
       let { browserWSEndpoint } = newOptions;
@@ -59,7 +63,7 @@ module.exports = async function(link = 'https://google.com', options = {}) {
     if (textNodes.length > 0) {
       await page.evaluate(hideTextNodes);
     }
-    
+
     const bg = await page.screenshot(Object.assign({
       type: 'jpeg', 
       fullPage: true,
