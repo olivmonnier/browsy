@@ -21,7 +21,7 @@ module.exports = function() {
     const rect = node.parentElement.getBoundingClientRect();
     const { top, left, width, height } = rect;
     
-    return { top, left, width, height }
+    return { top, left, width: Math.ceil(width), height: Math.ceil(height) }
   }
   
   function getTextOfTextNode(node) {
