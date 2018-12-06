@@ -32,7 +32,7 @@ module.exports.routes = {
   * not match any of those, it is matched against static assets.             *
   *                                                                          *
   ***************************************************************************/
-  'GET /navigate': { view: 'pages/navigate' },
+  'GET /': { view: 'pages/navigate' },
   'POST /navigate': 'navigation/navigate'
 
 };
