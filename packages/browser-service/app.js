@@ -7,9 +7,17 @@ const getFontFamily = require('./utils/getFontFamily');
 const optionsDefault = require('./defaults');
 
 module.exports = async function(link = '', options = {}) {
-  try {
-    let browser, browserWSEndpoint, FONTS = [], STYLESHEETS = [];
+  let browser, browserWSEndpoint, FONTS = [], STYLESHEETS = [];
 
+  process.on('uncaughtException', () => {
+    if (browser) browser.close();
+  });
+
+  process.on('unhandledRejection', () => {
+    if (browser) browser.close();
+  });
+
+  try {
     const newOptions = Object.assign({}, optionsDefault, options);
     const quality = newOptions.screenshot.quality / 100;
     const { protocol, hostname, pathname } = url.parse(link);
