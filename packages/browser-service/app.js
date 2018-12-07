@@ -72,6 +72,7 @@ module.exports = async function(link = '', options = {}) {
         width: pageRect.width,
         height: pageRect.height
       },
+      quality: 90,
       encoding: 'base64'
     });
     const html = renderLayout(textNodes, FONTS, bg, newOptions.viewport);
