@@ -19,7 +19,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'pages/homepage' },
+  // '/': { view: 'pages/homepage' },
 
 
   /***************************************************************************
@@ -33,6 +33,6 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   'GET /': { view: 'pages/navigate' },
-  'POST /navigate': 'navigation/navigate'
+  'POST /navigate': 'NavigationController.navigate'
 
 };
