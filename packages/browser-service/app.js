@@ -1,18 +1,17 @@
 const puppeteer = require('puppeteer');
 const css = require('css');
 const url = require('url');
-const encode = require( 'hashcode' ).hashCode;
-const { getTextNodes, hideTextNodes } = require('./page');
+const { backgroundQuality, getTextNodes, hideTextNodes } = require('./page');
 const { renderLayout } = require('./renders');
 const getFontFamily = require('./utils/getFontFamily');
 const optionsDefault = require('./defaults');
-const fs = require('fs');
 
-module.exports = async function(link = 'https://google.com', options = {}) {
+module.exports = async function(link = '', options = {}) {
   try {
     let browser, browserWSEndpoint, FONTS = [], STYLESHEETS = [];
 
-    const newOptions = Object.assign({}, optionsDefault, options)
+    const newOptions = Object.assign({}, optionsDefault, options);
+    const quality = newOptions.screenshot.quality / 100;
     const { protocol, hostname, pathname } = url.parse(link);
     const newUrl = url.format({ 
       protocol: protocol || 'http:', 
@@ -52,10 +51,8 @@ module.exports = async function(link = 'https://google.com', options = {}) {
     });
   
     await page.setViewport(newOptions.viewport);
-    await page.goto(newUrl, { waitUntil: 'networkidle0' });
-    
+    await page.goto(newUrl, { waitUntil: 'networkidle2' });
     const textNodes = await page.evaluate(getTextNodes) || [];
-
     if (newOptions.fonts) {
       FONTS = getFontFamily(FONTS, STYLESHEETS)
     }
@@ -63,18 +60,24 @@ module.exports = async function(link = 'https://google.com', options = {}) {
     if (textNodes.length > 0) {
       await page.evaluate(hideTextNodes);
     }
+    
+    const pageRect = await page.evaluate(backgroundQuality, quality);
 
-    const bg = await page.screenshot(Object.assign({
+    const bg = await page.screenshot({
       type: 'jpeg', 
-      fullPage: true,
+      fullPage: false,
+      clip: {
+        x: pageRect.left,
+        y: pageRect.top,
+        width: pageRect.width,
+        height: pageRect.height
+      },
       encoding: 'base64'
-    }, newOptions.screenshot));
-    const html = renderLayout(textNodes, FONTS, bg);
-    const hash = encode().value(bg);
-
+    });
+    const html = renderLayout(textNodes, FONTS, bg, newOptions.viewport);
     await browser.close();
     
-    return { html, hash, browserWSEndpoint };
+    return { html, browserWSEndpoint };
     
   } catch (e) {
     console.error(e);

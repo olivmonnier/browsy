@@ -18,13 +18,10 @@ module.exports = function() {
     span.setAttribute('data-browsy-node', 'text');
     node.parentNode.insertBefore(span, node);
 
-    const rectSpan = span.getBoundingClientRect();
-    const { left } = rectSpan;
-
     span.appendChild(node); 
     
     const rect = node.parentElement.getBoundingClientRect();
-    const { top, width, height } = rect;
+    const { top, left, width, height } = rect;
     
     return { 
       top: top + 'px', 

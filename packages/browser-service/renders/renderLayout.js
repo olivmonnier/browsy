@@ -38,12 +38,12 @@ const styles = `
   }
 `;
 
-module.exports = function(textNodes, fonts, bg) {
+module.exports = function(textNodes, fonts, bg, viewport) {
   return '<html><head><meta charset="utf-8" /><style>' + 
     (fonts ? renderFonts(fonts) : '') +
     styles.replace(/\n/g, '') + 
     '</style></head><body><main>' +
-    '<img class="bg" src="data:image/jpeg;base64,' + bg + '"/>' + 
+    '<img class="bg" src="data:image/jpeg;base64,' + bg + '" style="width:'+ viewport.width + 'px;height: auto;"/>' + 
     renderTextNodes(textNodes) +
     '</main></body></html>';
 }
