@@ -13,22 +13,31 @@ module.exports = function() {
     } else return (el.offsetParent === null);
   }
 
-  function getPositionsTextNode(node) {  
+  function offset(el) {
+    const rect = el.getBoundingClientRect(),
+    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    return { 
+      top: (rect.top + scrollTop) + 'px', 
+      left: (rect.left + scrollLeft) + 'px', 
+      width: Math.ceil(rect.width) + 'px', 
+      height: Math.ceil(rect.height) + 'px' 
+    }
+  }
+
+  function getOffsetTextNode(node) {  
     const span = document.createElement('span');
     span.setAttribute('data-browsy-node', 'text');
     node.parentNode.insertBefore(span, node);
 
+    const { left } = offset(span);
+
     span.appendChild(node); 
     
-    const rect = node.parentElement.getBoundingClientRect();
-    const { top, left, width, height } = rect;
+    const { top, width, height } = offset(node.parentElement);
     
-    return { 
-      top: top + 'px', 
-      left: left + 'px', 
-      width: (Math.ceil(width) + 1) + 'px', 
-      height: (Math.ceil(height) + 1) + 'px' 
-    }
+    return { top, left, width, height }
   }
   
   function getTextOfTextNode(node) {
@@ -59,7 +68,7 @@ module.exports = function() {
     if (currentNode.textContent.trim() !== '') {
       const textNode = {
         styles: getStylesText(parentEl),
-        positions: getPositionsTextNode(currentNode),
+        positions: getOffsetTextNode(currentNode),
         text: getTextOfTextNode(currentNode),
         parentTagName: parentEl.tagName
       }
