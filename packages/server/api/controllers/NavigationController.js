@@ -7,7 +7,7 @@ module.exports = {
 
     // All done.
     return res.json({
-      locals: { html}
+      locals: { html }
     });
   }
 }
