@@ -36,8 +36,18 @@ module.exports = function() {
   }
 
   function getStylesText(node) {
-    const styles = window.getComputedStyle(node)
-    const { padding, fontFamily, fontSize, fontWeight, color, textAlign, textTransform, lineHeight, whiteSpace, letterSpacing } = styles;
+    const { 
+      padding, 
+      fontFamily, 
+      fontSize, 
+      fontWeight, 
+      color, 
+      textAlign, 
+      textTransform, 
+      lineHeight, 
+      whiteSpace, 
+      letterSpacing 
+    } = window.getComputedStyle(node)
 
     return { padding, fontFamily, fontSize, fontWeight, color, textAlign, textTransform, lineHeight, whiteSpace, letterSpacing }
   }
