@@ -59,7 +59,7 @@ module.exports = async function(link = '', options = {}) {
     });
   
     await page.setViewport(newOptions.viewport);
-    await page.goto(newUrl, { waitUntil: 'networkidle2' });
+    await page.goto(newUrl, { waitUntil: 'networkidle0' });
     const textNodes = await page.evaluate(getTextNodes) || [];
     if (newOptions.fonts) {
       FONTS = getFontFamily(FONTS, STYLESHEETS)
@@ -84,7 +84,7 @@ module.exports = async function(link = '', options = {}) {
       encoding: 'base64'
     });
     const html = renderLayout(textNodes, FONTS, bg, newOptions.viewport);
-    // await browser.close();
+    await browser.close();
     
     return { html, browserWSEndpoint };
     
