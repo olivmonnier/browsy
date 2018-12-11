@@ -1,4 +1,8 @@
 module.exports = function() {
+  const nodeList = [];
+  const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
   function isHidden(el) {
     const style = window.getComputedStyle(el);
     const rect = el.getBoundingClientRect();
@@ -13,10 +17,12 @@ module.exports = function() {
     } else return (el.offsetParent === null);
   }
 
+  function isTextNode(){
+    return ( this.nodeType === 3 );
+  }
+
   function offset(el) {
-    const rect = el.getBoundingClientRect(),
-    scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const rect = el.getBoundingClientRect();  
 
     return { 
       top: (rect.top + scrollTop) + 'px', 
@@ -24,20 +30,6 @@ module.exports = function() {
       width: Math.ceil(rect.width) + 'px', 
       height: Math.ceil(rect.height) + 'px' 
     }
-  }
-
-  function getOffsetTextNode(node) {  
-    const span = document.createElement('span');
-    span.setAttribute('data-browsy-node', 'text');
-    node.parentNode.insertBefore(span, node);
-
-    const { left } = offset(span);
-
-    span.appendChild(node); 
-    
-    const { top, width, height } = offset(node.parentElement);
-    
-    return { top, left, width, height }
   }
   
   function getTextOfTextNode(node) {
@@ -51,7 +43,6 @@ module.exports = function() {
     return { fontFamily, fontSize, fontWeight, color, textAlign, textTransform, lineHeight, whiteSpace, letterSpacing }
   }
   
-  const nodeList = [];
   const treeWalker = document.createTreeWalker(
     document.body,
     NodeFilter.SHOW_TEXT,
@@ -62,17 +53,22 @@ module.exports = function() {
   while(treeWalker.nextNode()) {
     const { currentNode } = treeWalker;
     const parentEl = currentNode.parentElement;
+    const span = document.createElement('span');
 
+    span.setAttribute('data-browsy-node', 'text');
+    currentNode.parentNode.insertBefore(span, currentNode);
+    span.appendChild(currentNode); 
+    
     parentEl.setAttribute('data-browsy-node', 'parent');
-
+    
     if (currentNode.textContent.trim() !== '') {
-      const textNode = {
+      const textNode = { 
         styles: getStylesText(parentEl),
-        positions: getOffsetTextNode(currentNode),
+        positions: offset(span),
         text: getTextOfTextNode(currentNode),
         parentTagName: parentEl.tagName
       }
-
+      
       nodeList.push(textNode);
     }
   }
