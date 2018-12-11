@@ -1,4 +1,3 @@
-const renderFonts = require('./renderFonts');
 const renderTextNodes = require('./renderTextNodes');
 const styles = `
   * {
@@ -30,7 +29,7 @@ const styles = `
   li {
     list-style: none;
   }
-  .bg {
+  img {
     image-rendering: optimizeSpeed;             
     image-rendering: -moz-crisp-edges;          /* Firefox                        */
     image-rendering: -o-crisp-edges;            /* Opera                          */
@@ -41,12 +40,10 @@ const styles = `
   }
 `;
 
-module.exports = function(textNodes, fonts, bg, viewport) {
-  return '<html><head><meta charset="utf-8" /><style>' + 
-    (fonts ? renderFonts(fonts) : '') +
+module.exports = function(textNodes) {
+  return '<html><head><meta charset="utf-8" /><style>' +
     styles.replace(/\n/g, '') + 
     '</style></head><body><main>' +
-    '<img class="bg" src="data:image/jpeg;base64,' + bg + '" style="width:'+ viewport.width + 'px;height: auto;"/>' + 
     renderTextNodes(textNodes) +
     '</main></body></html>';
 }
