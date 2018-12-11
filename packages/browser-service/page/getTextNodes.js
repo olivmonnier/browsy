@@ -68,7 +68,7 @@ module.exports = function() {
   return parentNodes.map(parentNode => {
     const parentEl = parentNode.parentElement;
 
-    if (parentEl.hasAttribute('data-browsy-node') && parentEl.getAttribute('data-browsy-node')) return null;
+    if (parentEl.hasAttribute('data-browsy-node') && parentEl.getAttribute('data-browsy-node') === 'parent') return null;
 
     const childNodes = Array.from(parentNode.childNodes)
       .filter(node => (
@@ -76,7 +76,7 @@ module.exports = function() {
           node.hasAttribute('data-browsy-node') && 
           node.getAttribute('data-browsy-node') === 'text'
         ) || (
-          node.nodeType === 1 && isInline(node)
+          node.nodeType === 1 && isInline(node) && node.hasAttribute('data-browsy-node')
         )
       );
 
