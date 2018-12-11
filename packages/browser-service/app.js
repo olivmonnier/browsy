@@ -84,7 +84,7 @@ module.exports = async function(link = '', options = {}) {
       encoding: 'base64'
     });
     const html = renderLayout(textNodes, FONTS, bg, newOptions.viewport);
-    await browser.close();
+    // await browser.close();
     
     return { html, browserWSEndpoint };
     

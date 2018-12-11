@@ -27,6 +27,9 @@ const styles = `
     border: none;
     padding: 0;
   }
+  li {
+    list-style: none;
+  }
   .bg {
     image-rendering: optimizeSpeed;             
     image-rendering: -moz-crisp-edges;          /* Firefox                        */

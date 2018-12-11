@@ -1,6 +1,6 @@
 module.exports = {
   puppeteer: {
-    headless: true,
+    headless: false,
     args: ['--no-sandbox']
   },
   viewport: {
