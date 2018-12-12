@@ -16,12 +16,18 @@ module.exports = function() {
     } else return (el.offsetParent === null);
   }
 
-  function isTextNode(node){
-    return ( node.nodeType === 3 );
-  }
-
   function isInline(el) {
     return window.getComputedStyle(el).getPropertyValue('display') === 'inline';
+  }
+
+  function isTextNode(node){
+    return node.textContent.trim() !== '' &&
+      node.hasAttribute('data-browsy-node') && 
+      node.getAttribute('data-browsy-node') === 'text';
+  }
+
+  function isParentNode(node) {
+    return node.hasAttribute('data-browsy-node') && node.getAttribute('data-browsy-node') === 'parent'
   }
 
   function offset(el) {
@@ -78,23 +84,19 @@ module.exports = function() {
   return parentNodes.map(parentNode => {
     const parentEl = parentNode.parentElement;
 
-    if (parentEl.hasAttribute('data-browsy-node') && parentEl.getAttribute('data-browsy-node') === 'parent') return null;
-
-    const childNodes = Array.from(parentNode.childNodes)
-      .filter(node => (
-          node.textContent.trim() !== '' &&
-          node.hasAttribute('data-browsy-node') && 
-          node.getAttribute('data-browsy-node') === 'text'
-        ) || (
-          node.nodeType === 1 && isInline(node) && node.hasAttribute('data-browsy-node')
-        )
-      );
-
-    return {
-      tagName: parentNode.tagName,
-      offset: offset(parentNode),
-      styles: getStylesText(parentNode),
-      text: childNodes.map(node => node.textContent).join('')
-    }
+    if (!isParentNode(parentEl)) {      
+      const childNodes = Array.from(parentNode.childNodes)
+        .filter(node => isTextNode(node) || (
+            node.nodeType === 1 && isInline(node) && node.hasAttribute('data-browsy-node')
+          )
+        );
+  
+      return {
+        tagName: parentNode.tagName,
+        offset: offset(parentNode),
+        styles: getStylesText(parentNode),
+        text: childNodes.map(node => node.textContent).join('')
+      }
+    } else return null;
   }).reduce((acc, curr) => curr ? [].concat(acc, curr) : acc, []);
 }
