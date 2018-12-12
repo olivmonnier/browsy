@@ -83,7 +83,7 @@ module.exports = async function(link = '', options = {}) {
       quality: 90,
       encoding: 'base64'
     });
-    const imgBackground = `<img src="data:image/jpeg;base64,${bg}" style="width:${viewport.width}px;height: auto;"/>`;
+    const imgBackground = `<img src="data:image/jpeg;base64,${buffer}" style="width:${newOptions.viewport.width}px;height: auto;"/>`;
     const fonts = FONTS ? renderFonts(FONTS) : '';
     const html = renderLayout(textNodes);
     await browser.close();

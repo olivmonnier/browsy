@@ -18,7 +18,7 @@ const styles = `
   main {
     position: relative;
   }
-  main * {
+  main *, img {
     position: absolute;
   }
   button {
