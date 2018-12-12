@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 const css = require('css');
 const url = require('url');
 const { backgroundQuality, getTextNodes, hideTextNodes } = require('./page');
-const { renderLayout } = require('./renders');
+const { renderLayout, renderFonts } = require('./renders');
 const getFontFamily = require('./utils/getFontFamily');
 const optionsDefault = require('./defaults');
 
@@ -71,7 +71,7 @@ module.exports = async function(link = '', options = {}) {
     
     const pageRect = await page.evaluate(backgroundQuality, quality);
 
-    const bg = await page.screenshot({
+    const buffer = await page.screenshot({
       type: 'jpeg', 
       fullPage: false,
       clip: {
@@ -83,10 +83,12 @@ module.exports = async function(link = '', options = {}) {
       quality: 90,
       encoding: 'base64'
     });
-    const html = renderLayout(textNodes, FONTS, bg, newOptions.viewport);
+    const imgBackground = `<img src="data:image/jpeg;base64,${buffer}" style="width:${newOptions.viewport.width}px;height: auto;"/>`;
+    const fonts = FONTS ? renderFonts(FONTS) : '';
+    const html = renderLayout(textNodes);
     await browser.close();
     
-    return { html, browserWSEndpoint };
+    return { html, fonts, imgBackground, browserWSEndpoint };
     
   } catch (e) {
     console.error(e);

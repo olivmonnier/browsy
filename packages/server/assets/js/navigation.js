@@ -1,3 +1,5 @@
+let browserId;
+
 const $formNav = document.querySelector('.form-nav');
 const $inputUrl = document.querySelector('input[name="url"]');
 const $iframe = document.querySelector('iframe');
@@ -19,7 +21,9 @@ $formNav.addEventListener('submit', function(e) {
   const viewport = { width, height };
   const fonts = $checkboxFonts.checked;
   const quality = parseInt($inputQuality.value, 10);
-  const options = { viewport, fonts, screenshot: { quality } };
+  const options = Object.assign({}, { viewport, fonts, screenshot: { quality } }, 
+    {}//(browserId) ? { browserWSEndpoint: browserId } : {}
+  );
   const url = $inputUrl.value;
   const body = JSON.stringify({ url, options });
 
@@ -28,9 +32,36 @@ $formNav.addEventListener('submit', function(e) {
   fetch(formUrl, { headers, method, body })
     .then(response => response.json())
     .then(json => {
-      const { html } = json.locals;
+      const { html, fonts, imgBackground, browserWSEndpoint } = json.locals;
+      const doc = new DOMParser().parseFromString(html, 'text/html');
 
-      $iframe.setAttribute('src', `data:text/html;charset=utf-8,${encodeURI(html)}`);
+      browserId = browserWSEndpoint;
+      buildBackground(imgBackground, doc);
+      buildFontStyles(fonts, doc);
+
+      $iframe.setAttribute('src', `data:text/html;charset=utf-8,${encodeURI(
+        doc.documentElement.innerHTML
+      )}`);
     })
     .finally(() => $iframe.parentElement.classList.remove('loading'));
 });
+
+function htmlToElement(html) {
+  const template = document.createElement('template');
+
+  template.innerHTML = html.trim();
+
+  return template.content.firstChild;
+}
+
+function buildBackground(imgString, dom) {
+  const $imgBackground = htmlToElement(imgString);
+
+  dom.body.prepend($imgBackground);
+}
+
+function buildFontStyles(fonts, dom) {
+  const $style = htmlToElement(`<style>${fonts}</style>`);
+
+  dom.head.appendChild($style);
+}
