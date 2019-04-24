@@ -1,51 +1,20 @@
 {
-  "name": "server",
-  "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
-  "keywords": [],
+  "name": "@browsy/server",
+  "version": "1.0.0",
+  "main": "index.js",
   "dependencies": {
-    "@browsy/browser-service": "^1.0.0",
-    "@sailshq/connect-redis": "^3.2.1",
-    "@sailshq/lodash": "^3.10.3",
-    "@sailshq/socket.io-redis": "^5.2.0",
-    "cross-env": "^5.2.0",
-    "grunt": "1.0.1",
-    "grunt-sass": "^3.0.1",
-    "node-sass": "^4.9.3",
-    "sails": "^1.1.0",
-    "sails-hook-grunt": "^3.1.0",
-    "sails-hook-orm": "^2.1.1",
-    "sails-hook-sockets": "^1.5.5"
-  },
-  "devDependencies": {
-    "@sailshq/eslint": "^4.19.3",
-    "nodemon": "^1.18.7"
+    "@browsy/browser": "^1.0.0",
+    "koa":"^2.7.0",
+    "koa-body":"^4.1.0",
+    "koa-compress": "^3.0.0"
   },
   "scripts": {
-    "dev": "nodemon --watch config --watch api --watch sails lift",
-    "start": "cross-env NODE_ENV=production node app.js",
-    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
-    "lint": "eslint . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
-    "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
-    "build": "gulp"
+    "start": "node index"
   },
-  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/anonymous node/sails user/server.git"
   },
-  "author": "anonymous node/sails user",
-  "license": "",
-  "engines": {
-    "node": "^8.11"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      ".tmp/*",
-      ".git/*",
-      "views/*"
-    ],
-    "delay": "2500"
-  }
+  "author": "olivmonnier",
+  "license": ""
 }
